@@ -1,6 +1,6 @@
 # partitioned-batch-job
 
- Nesta poc de particionamento, utilizei o banco de dados mysql :
+ Nesta poc de particionamento, utilizei o banco de dados MYSQL no kubernetes [Informacoes sobre url etc .. no arquivo application.properties] :
    
    * SCHEME : batch
    * TABELAS / REGISTROS 
