@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: batchpoc
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+        - image: rodriguesflavio/particionador
+          name: batch
+          resources: {}
+      restartPolicy: Never
+status: {}

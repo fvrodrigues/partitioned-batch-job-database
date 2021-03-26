@@ -1,8 +1,8 @@
-package com.bv.batch.configuration;
+package com.batch.configuration;
 
-import com.bv.batch.domain.Customer;
-import com.bv.batch.mapper.CustomerRowMapper;
-import com.bv.batch.partitioner.ColumnRangePartitioner;
+import com.batch.domain.Customer;
+import com.batch.mapper.CustomerRowMapper;
+import com.batch.partitioner.ColumnRangePartitioner;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
