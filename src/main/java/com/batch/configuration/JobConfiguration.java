@@ -32,7 +32,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-
 import javax.sql.DataSource;
 import java.util.*;
 
@@ -69,7 +68,7 @@ public class JobConfiguration {
 											 JobExplorer jobExplorer,
 											 TaskRepository taskRepository) throws Exception {
 
-	    Resource resource = this.resourceLoader.getResource("file:"+image);
+	    Resource resource = this.resourceLoader.getResource(image);
 		DeployerPartitionHandler partitionHandler =  new DeployerPartitionHandler(taskLauncher, jobExplorer, resource, "slaveStep");
 		List<String> commandLineArgs = new ArrayList<>(3);
 		commandLineArgs.add("--spring.profiles.active=worker");
