@@ -2,7 +2,11 @@
 
  Nesta poc de particionamento, utilizei o banco de dados MYSQL no kubernetes [Informacoes sobre url etc .. no arquivo application.properties] :
    
-   * SCHEME : batch
+   * DATABASE : batch
+   
+       CREATE DATABASE batch; 
+       ALTER DATABASE batch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+                            
    * TABELAS / REGISTROS 
         
          CREATE TABLE customer (
