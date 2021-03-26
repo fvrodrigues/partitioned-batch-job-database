@@ -1,6 +1,6 @@
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/configuration/JobConfiguration.java
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/mapper/CustomerRowMapper.java
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/domain/Customer.java
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/PartitionedBatchJobApplication.java
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/partitioner/ColumnRangePartitioner.java
-/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/batch/configuration/DataSourceConfiguration.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/PartitionedBatchJobApplication.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/domain/Customer.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/configuration/DataSourceConfiguration.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/configuration/JobConfiguration.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/mapper/CustomerRowMapper.java
+/home/flavio/applications/workspace/partitioned-batch-job/src/main/java/com/bv/batch/partitioner/ColumnRangePartitioner.java
