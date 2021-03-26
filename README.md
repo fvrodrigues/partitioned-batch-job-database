@@ -37,3 +37,5 @@
          INSERT INTO customer VALUES ('18', 'Jose', 'Hannah', '16-09-1950 10:10:10');
          INSERT INTO customer VALUES ('19', 'Valerie', 'Hilbert', '13-06-1966 10:10:10');
          INSERT INTO customer VALUES ('20', 'Patrick', 'Durham', '12-10-1978 10:10:10');
+         
+         
