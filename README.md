@@ -4,8 +4,11 @@
    
    * DATABASE : batch
    
-       CREATE DATABASE batch; 
-       ALTER DATABASE batch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+        CREATE DATABASE batch; 
+        ALTER DATABASE batch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+        
+         CREATE DATABASE batch 
+         ALTER DATABASE batch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;                  
                             
    * TABELAS / REGISTROS 
         
