@@ -32,15 +32,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+
 import javax.sql.DataSource;
 import java.util.*;
 
 @Configuration
 @PropertySource("classpath:application.properties")
 public class JobConfiguration {
-
-	@Value("${particionamento.image}")
-	private String image;
 
 	@Autowired
 	public JobBuilderFactory jobBuilderFactory;
@@ -63,8 +61,14 @@ public class JobConfiguration {
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
 
+	@Value("${particionamento.image}")
+	private String image;
+
 	@Bean
-	public PartitionHandler partitionHandler(TaskLauncher taskLauncher, JobExplorer jobExplorer, TaskRepository taskRepository) throws Exception {
+	public PartitionHandler partitionHandler(TaskLauncher taskLauncher,
+											 JobExplorer jobExplorer,
+											 TaskRepository taskRepository) throws Exception {
+
 	    Resource resource = this.resourceLoader.getResource("file:"+image);
 		DeployerPartitionHandler partitionHandler =  new DeployerPartitionHandler(taskLauncher, jobExplorer, resource, "slaveStep");
 		List<String> commandLineArgs = new ArrayList<>(3);

@@ -2,6 +2,7 @@ package com.bv.batch.mapper;
 
 import com.bv.batch.domain.Customer;
 import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
