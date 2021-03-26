@@ -1,6 +1,6 @@
 # partitioned-batch-job
 
- Neste poc de particionamento, utilizei o banco de dados mysql :
+ Nesta poc de particionamento, utilizei o banco de dados mysql :
    
    * SCHEME : batch
    * TABELAS / REGISTROS 
