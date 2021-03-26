@@ -1,7 +1,0 @@
-com/bv/batch/domain/Customer.class
-com/bv/batch/partitioner/ColumnRangePartitioner.class
-com/bv/batch/configuration/DataSourceConfiguration.class
-com/bv/batch/PartitionedBatchJobApplication.class
-com/bv/batch/mapper/CustomerRowMapper.class
-com/bv/batch/domain/Customer$CustomerBuilder.class
-com/bv/batch/configuration/JobConfiguration.class
