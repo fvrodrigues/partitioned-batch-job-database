@@ -89,10 +89,9 @@ public class JobConfiguration {
 	}
 
 	@Bean
-	@Profile("!worker")
 	public Job partitionedJob(PartitionHandler partitionHandler) throws Exception {
-		return this.jobBuilderFactory.get("partitionedJob" + new Random().nextInt())
-									 .start(stepPoc(partitionHandler))
+		return this.jobBuilderFactory.get("partitionedJob")
+									 .start(step(partitionHandler))
 									 .build();
 	}
 
@@ -102,12 +101,12 @@ public class JobConfiguration {
 	}
 
 	@Bean
-	public Step stepPoc(PartitionHandler partitionHandler) throws Exception {
+	public Step step(PartitionHandler partitionHandler) throws Exception {
 		return this.stepBuilderFactory.get("step1")
-			.partitioner(slaveStep().getName(), partitioner())
-			.step(slaveStep())
-			.partitionHandler(partitionHandler)
-			.build();
+									  .partitioner(slaveStep().getName(), partitioner())
+									  .step(slaveStep())
+									  .partitionHandler(partitionHandler)
+									  .build();
 	}
 
 	@Bean
