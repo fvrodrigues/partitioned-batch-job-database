@@ -5,7 +5,15 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.batch.core.partition.support.Partitioner;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +34,12 @@ public class ColumnRangePartitioner implements Partitioner {
 		Integer min = jdbcTemplate.queryForObject("SELECT MIN(id) FROM customer " , Integer.class);
 		Integer max = jdbcTemplate.queryForObject("SELECT MAX(id) FROM customer " , Integer.class);
 
-		Integer targetSize = (max) / 2;
-		Integer number = 0;
+		Integer targetSize = (max) / 10;
+		Integer number = 1;
 		Integer start = min;
-		Integer end = start + targetSize - 1;
+		Integer end = start + targetSize;
 
-		while (start <= max) {
+		for (int i = 1; i <= 10; i++) {
 			ExecutionContext value = new ExecutionContext();
 			result.put("partition" + number, value);
 			if (end >= max) {
@@ -44,7 +52,16 @@ public class ColumnRangePartitioner implements Partitioner {
 			number++;
 		}
 
+		int i =1;
+		for (ExecutionContext value : result.values()) {
+			System.out.println(value.get("partition"+i));
+			System.out.println(value.get("minValue"));
+			System.out.println(value.get("maxValue"));
+			i++;
+		}
+
 		return result;
 	}
-
 }
+
+
