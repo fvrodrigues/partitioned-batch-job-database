@@ -11,11 +11,13 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.partition.PartitionHandler;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.deployer.resource.support.DelegatingResourceLoader;
@@ -31,9 +33,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class JobConfiguration {
@@ -60,17 +66,30 @@ public class JobConfiguration {
     public StepBuilderFactory stepBuilderFactory;
 
     @Bean
+    public JobRepository getJobRepository() throws Exception {
+        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setTransactionManager(getTransactionManager()	);
+        factory.setIsolationLevelForCreate("ISOLATION_READ_UNCOMMITTED");
+        factory.afterPropertiesSet();
+        return (JobRepository) factory.getObject();
+    }
+
+    private PlatformTransactionManager getTransactionManager() {
+        return new ResourcelessTransactionManager();
+    }
+
+    @Bean
     public PartitionHandler partitionHandler(TaskLauncher taskLauncher, JobExplorer jobExplorer, TaskRepository taskRepository) throws Exception {
-        Resource resource = this.resourceLoader.getResource("file:rodriguesflavio/flavio-poc");
-        DeployerPartitionHandler partitionHandler =  new DeployerPartitionHandler(taskLauncher, jobExplorer, resource, "slaveStep");
+        Resource resource = this.resourceLoader.getResource("file:rodriguesflavio/jobbanco7");
+        DeployerPartitionHandler partitionHandler = new DeployerPartitionHandler(taskLauncher, jobExplorer, resource, "workerStep");
         List<String> commandLineArgs = new ArrayList<>(3);
         commandLineArgs.add("--spring.profiles.active=worker");
         commandLineArgs.add("--spring.cloud.task.initialize-enabled=false");
         commandLineArgs.add("--spring.batch.initializer.enabled=false");
         partitionHandler.setCommandLineArgsProvider(new PassThroughCommandLineArgsProvider(commandLineArgs));
         partitionHandler.setEnvironmentVariablesProvider(new SimpleEnvironmentVariablesProvider(this.environment));
-        partitionHandler.setMaxWorkers(10);
-        partitionHandler.setGridSize(2);
+        partitionHandler.setMaxWorkers(2);
         partitionHandler.setApplicationName("PartitionedBatchJobTask");
         return partitionHandler;
     }
@@ -82,25 +101,8 @@ public class JobConfiguration {
     }
 
     @Bean
-    @Profile("!worker")
-    public Job partitionedJob(PartitionHandler partitionHandler) throws Exception {
-        return this.jobBuilderFactory.get("partitionedJob" + new Random().nextInt())
-                .start(stepPoc(partitionHandler))
-                .build();
-    }
-
-    @Bean
     public ColumnRangePartitioner partitioner() {
         return new ColumnRangePartitioner();
-    }
-
-    @Bean
-    public Step stepPoc(PartitionHandler partitionHandler) throws Exception {
-        return this.stepBuilderFactory.get("step1")
-                .partitioner(slaveStep().getName(), partitioner())
-                .step(slaveStep())
-                .partitionHandler(partitionHandler)
-                .build();
     }
 
     @Bean
@@ -134,12 +136,29 @@ public class JobConfiguration {
     }
 
     @Bean
-    public Step slaveStep() {
-        return stepBuilderFactory.get("slaveStep")
+    public Step workerStep() {
+        return stepBuilderFactory.get("workerStep")
                 .<Customer, Customer>chunk(10000)
                 .reader(pagingItemReader(null, null))
                 .writer(customerItemWriter())
                 .build();
+    }
+
+    @Bean
+    public Step splitWorkers(PartitionHandler partitionHandler) throws Exception {
+        return this.stepBuilderFactory.get("step1")
+                .partitioner(workerStep().getName(), partitioner())
+                .step(workerStep())
+                .partitionHandler(partitionHandler)
+                .build();
+    }
+
+    @Bean
+    @Profile("!worker")
+    public Job partitionedJob(PartitionHandler partitionHandler) throws Exception {
+        return this.jobBuilderFactory.get("partitionedJob")
+                   .start(splitWorkers(partitionHandler))
+                   .build();
     }
 
 }

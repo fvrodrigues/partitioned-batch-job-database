@@ -9,15 +9,6 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.batch.core.partition.support.Partitioner;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 public class ColumnRangePartitioner implements Partitioner {
 
@@ -34,12 +25,12 @@ public class ColumnRangePartitioner implements Partitioner {
 		Integer min = jdbcTemplate.queryForObject("SELECT MIN(id) FROM customer " , Integer.class);
 		Integer max = jdbcTemplate.queryForObject("SELECT MAX(id) FROM customer " , Integer.class);
 
-		Integer targetSize = (max) / 10;
+		Integer targetSize = (max) / 4;
 		Integer number = 1;
 		Integer start = min;
 		Integer end = start + targetSize;
 
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= 4; i++) {
 			ExecutionContext value = new ExecutionContext();
 			result.put("partition" + number, value);
 			if (end >= max) {

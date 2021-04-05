@@ -4,13 +4,20 @@ metadata:
   creationTimestamp: null
   name: batchpoc
 spec:
+  backoffLimit: 0
   template:
     metadata:
       creationTimestamp: null
     spec:
       containers:
-        - image: rodriguesflavio/particionador
+        - image: rodriguesflavio/jobbanco7
+          command:
+            - /bin/sh
+            - -c
+            - java -jar app.jar jobId=301
           name: batch
           resources: {}
       restartPolicy: Never
+
 status: {}
+  ~
