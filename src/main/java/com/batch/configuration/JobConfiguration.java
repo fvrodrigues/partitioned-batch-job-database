@@ -65,6 +65,9 @@ public class JobConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
+    @Value("${particionamento.imager}")
+    private String image;
+
     @Bean
     public JobRepository getJobRepository() throws Exception {
         JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
@@ -81,7 +84,7 @@ public class JobConfiguration {
 
     @Bean
     public PartitionHandler partitionHandler(TaskLauncher taskLauncher, JobExplorer jobExplorer, TaskRepository taskRepository) throws Exception {
-        Resource resource = this.resourceLoader.getResource("file:rodriguesflavio/jobbanco7");
+        Resource resource = this.resourceLoader.getResource(image);
         DeployerPartitionHandler partitionHandler = new DeployerPartitionHandler(taskLauncher, jobExplorer, resource, "workerStep");
         List<String> commandLineArgs = new ArrayList<>(3);
         commandLineArgs.add("--spring.profiles.active=worker");
