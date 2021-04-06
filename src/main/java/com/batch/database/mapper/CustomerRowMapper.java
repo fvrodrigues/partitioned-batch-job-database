@@ -1,6 +1,6 @@
-package com.batch.mapper;
+package com.batch.database.mapper;
 
-import com.batch.domain.Customer;
+import com.batch.database.domain.Customer;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

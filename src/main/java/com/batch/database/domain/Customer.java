@@ -1,4 +1,4 @@
-package com.batch.domain;
+package com.batch.database.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

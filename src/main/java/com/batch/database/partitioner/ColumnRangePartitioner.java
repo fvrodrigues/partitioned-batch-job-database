@@ -1,4 +1,4 @@
-package com.batch.partitioner;
+package com.batch.database.partitioner;
 
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.item.ExecutionContext;
@@ -33,9 +33,12 @@ public class ColumnRangePartitioner implements Partitioner {
 		for (int i = 1; i <= 5; i++) {
 			ExecutionContext value = new ExecutionContext();
 			result.put("partition" + number, value);
+
 			if (end >= max) {
 				end = max;
 			}
+
+			value.putInt("particao", i);
 			value.putInt("minValue", start);
 			value.putInt("maxValue", end);
 			start += targetSize;
@@ -45,7 +48,7 @@ public class ColumnRangePartitioner implements Partitioner {
 
 		int i =1;
 		for (ExecutionContext value : result.values()) {
-			System.out.println(value.get("partition"+i));
+			System.out.println(value.get("partition"));
 			System.out.println(value.get("minValue"));
 			System.out.println(value.get("maxValue"));
 			i++;

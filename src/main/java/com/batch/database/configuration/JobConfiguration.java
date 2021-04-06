@@ -1,8 +1,8 @@
-package com.batch.configuration;
+package com.batch.database.configuration;
 
-import com.batch.domain.Customer;
-import com.batch.mapper.CustomerRowMapper;
-import com.batch.partitioner.ColumnRangePartitioner;
+import com.batch.database.domain.Customer;
+import com.batch.database.mapper.CustomerRowMapper;
+import com.batch.database.partitioner.ColumnRangePartitioner;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -65,7 +65,7 @@ public class JobConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    @Value("${particionamento.imager}")
+    @Value("${particionamento.image}")
     private String image;
 
     @Bean
@@ -110,8 +110,14 @@ public class JobConfiguration {
 
     @Bean
     @StepScope
-    public JdbcPagingItemReader<Customer> pagingItemReader(@Value("#{stepExecutionContext['minValue']}") Long minValue ,
+    public JdbcPagingItemReader<Customer> pagingItemReader(@Value("#{stepExecutionContext['particao']}") Integer particao ,
+                                                           @Value("#{stepExecutionContext['minValue']}") Long minValue ,
                                                            @Value("#{stepExecutionContext['maxValue']}") Long maxValue) {
+
+        if (particao == 4) {
+            throw new RuntimeException("FORCANDO ERRO");
+        }
+
         Map<String, Order> sortKeys = new HashMap<>();
         sortKeys.put("id", Order.ASCENDING);
         MySqlPagingQueryProvider queryProvider = new MySqlPagingQueryProvider();
@@ -142,7 +148,7 @@ public class JobConfiguration {
     public Step workerStep() {
         return stepBuilderFactory.get("workerStep")
                 .<Customer, Customer>chunk(10000)
-                .reader(pagingItemReader(null, null))
+                .reader(pagingItemReader(null,null, null))
                 .writer(customerItemWriter())
                 .build();
     }
