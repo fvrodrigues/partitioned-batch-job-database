@@ -25,12 +25,12 @@ public class ColumnRangePartitioner implements Partitioner {
 		Integer min = jdbcTemplate.queryForObject("SELECT MIN(id) FROM customer " , Integer.class);
 		Integer max = jdbcTemplate.queryForObject("SELECT MAX(id) FROM customer " , Integer.class);
 
-		Integer targetSize = (max) / 4;
+		Integer targetSize = (max) / 5;
 		Integer number = 1;
 		Integer start = min;
 		Integer end = start + targetSize;
 
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 1; i <= 5; i++) {
 			ExecutionContext value = new ExecutionContext();
 			result.put("partition" + number, value);
 			if (end >= max) {
